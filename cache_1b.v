@@ -30,7 +30,7 @@ module cache_1b(
 
   reg [26:0] tag;
   reg index;
-  reg realIndex;
+  reg [1:0] realIndex;
   reg [1:0] wordOffset;
   always @(*) begin
     /* parse the address */

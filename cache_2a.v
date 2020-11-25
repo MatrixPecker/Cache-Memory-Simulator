@@ -13,9 +13,9 @@ module cache_2a(
   output reg isMemRead,
   output reg [127:0] memWriteData,
   output reg isLock,
-  output reg [31:0] memAddress, // FIXME, construct this
+  output reg [31:0] memAddress,
   input [127:0] memReadData
-); 
+);
 
   reg [155:0] block [3:0];
 
