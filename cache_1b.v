@@ -13,6 +13,7 @@ module cache_1b(
   output reg isMemRead,
   output reg [127:0] memWriteData,
   output reg isLock,
+  output reg [3:0] isDirty,  
   input [127:0] memReadData
 );
 
@@ -103,6 +104,12 @@ module cache_1b(
         isHit = 0;
       end
         memWriteData = writeData; // though 128 bits are occupied, only the last 32 bits are effective.
+        case(address[3:2])
+          2'b00: isDirty=4'b0001;
+          2'b01: isDirty=4'b0010;
+          2'b10: isDirty=4'b0100;
+          2'b11: isDirty=4'b1000;
+        endcase
         isLock = 0;
         #1;
         isLock = 1;

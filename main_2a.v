@@ -1,10 +1,10 @@
-// data bus for cache 1a
+// data bus for cache 2a
 
 `timescale 1ns / 1ps
-`include "cache_1a.v"
+`include "cache_2a.v"
 `include "memory.v"
 
-module main_1a(
+module main_2a(
   input isRead,
   input [9:0] address,
   input [31:0] writeData,
@@ -16,9 +16,10 @@ module main_1a(
   wire isLock;
   wire [127:0] memWriteData;
   wire [127:0] memReadData;
+  wire [31:0] memAddress;
   wire [3:0] isDirty;
 
-  cache_1a cache(
+  cache_2a cache(
     .isRead (isRead),
     .address (address),
     .writeData (writeData),
@@ -27,6 +28,7 @@ module main_1a(
     .isMemRead (isMemRead),
     .memWriteData (memWriteData),
     .isLock (isLock),
+    .memAddress (memAddress),
     .isDirty (isDirty),
     .memReadData (memReadData)
   );
@@ -34,7 +36,7 @@ module main_1a(
   memory mem(
     .isMemRead (isMemRead),
     .isLock (isLock),
-    .address (address),
+    .address (memAddress),
     .writeData (memWriteData),
     .isDirty (isDirty),
     .readData (memReadData)

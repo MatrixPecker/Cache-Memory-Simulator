@@ -7,6 +7,7 @@ module memory(
   input isLock,
   input [9:0] address,
   input [127:0] writeData,
+  input [3:0] isDirty,
   output reg [127:0] readData
 );
 
@@ -28,12 +29,10 @@ module memory(
       if (isMemRead == 1) begin // read
         readData = {mem[address],mem[address+1],mem[address+2],mem[address+3]};
       end else begin // write
-        case (address[3:2])
-          2'b00: mem[address]   = writeData[31:0];
-          2'b01: mem[address+1] = writeData[31:0];
-          2'b10: mem[address+2] = writeData[31:0];
-          2'b11: mem[address+3] = writeData[31:0];
-        endcase
+        if(isDirty[0]) mem[address]   = writeData[31:0];
+        if(isDirty[1]) mem[address+1] = writeData[31:0];
+        if(isDirty[2]) mem[address+2] = writeData[31:0];
+        if(isDirty[3]) mem[address+3] = writeData[31:0];
       end
     end
   end

@@ -1,4 +1,4 @@
-// cache 1a (write through + direct mapped)
+// cache 1a (write back + direct mapped)
 
 `timescale 1ns / 1ps
 
@@ -13,11 +13,12 @@ module cache_1a(
   output reg isMemRead,
   output reg [127:0] memWriteData,
   output reg isLock,
+  output reg [31:0] memAddress, // FIXME
   output reg [3:0] isDirty,
   input [127:0] memReadData
 );
 
-  reg [154:0] block [3:0];
+  reg [155:0] block [3:0];
 
   integer i;
   initial begin
@@ -41,9 +42,15 @@ module cache_1a(
     if (isRead == 1) begin // read
       /* check the cache block */
       isMemRead = 1;
-      if (block[index][154]==1 && block[index][153:128]==tag) begin // hit
+      if (block[index][155]==1 && block[index][153:128]==tag) begin // hit
         isHit = 1;
       end else begin // miss
+        /* check whether the block is dirty */
+        if (block[index][154]==1) begin
+          /* write back to main memory */
+          isMemRead = 0;
+          // TODO
+        end
         /* call main memory */
         isHit = 0;
         isLock = 0;
@@ -76,12 +83,6 @@ module cache_1a(
         isHit = 0;
       end
         memWriteData = writeData; // though 128 bits are occupied, only the last 32 bits are effective.
-        case(address[3:2])
-          2'b00: isDirty=4'b0001;
-          2'b01: isDirty=4'b0010;
-          2'b10: isDirty=4'b0100;
-          2'b11: isDirty=4'b1000;
-        endcase
         isLock = 0;
         #1;
         isLock = 1;
