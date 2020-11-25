@@ -44,20 +44,26 @@ module cache_2a(
       if (block[index][155]==1 && block[index][153:128]==tag) begin // hit
         isHit = 1;
       end else begin // miss
+        isHit = 0;
         /* check whether the block is dirty */
         if (block[index][154]==1) begin // dirty
           /* write back to main memory */
           isMemRead = 0;
-          memAddress = {block[index][153:128],index[1:0],4'b0}; // FIXME: we set wordOffset to 0 and let isDirty decide it
-          // TODO
+          memAddress = {block[index][153:128],index[1:0],wordOffset[1:0],2'b0}; // for consistency, we insert wordOffset (but not used)
+          memWriteData = block[index][127:0];
+          isLock = 0;
+          #1;
+          isLock = 1;
         end
         /* call main memory */
-        isHit = 0;
+        isMemRead = 1;
+        memAddress = address;
         isLock = 0;
         #1; // wait for main memory to respond
         isLock = 1;
         /* update the block */
-        block[index][154] = 1;
+        block[index][155] = 1;
+        block[index][154] = 0; // marked as not dirty
         block[index][153:128] = tag;
         block[index][127:0] = memReadData;
       end
@@ -71,21 +77,36 @@ module cache_2a(
     end else begin // write
       isMemRead = 0;
       // readData = 0; // do not clear readData if the mode is switched to write
-      if (block[index][154]==1 && block[index][153:128]==tag) begin // hit
+      if (block[index][155]==1 && block[index][153:128]==tag) begin // hit
         isHit = 1;
-        case(wordOffset)
-          2'b00: block[index][127:96] = writeData;
-          2'b01: block[index][95:64] = writeData;
-          2'b10: block[index][63:32] = writeData;
-          2'b11: block[index][31:0] = writeData;
-        endcase
       end else begin
         isHit = 0;
-      end
-        memWriteData = writeData; // though 128 bits are occupied, only the last 32 bits are effective.
+        if (block[index][154]==1) begin // dirty
+          /* write back to main memory */
+          isMemRead = 0;
+          memAddress = {block[index][153:128],index[1:0],wordOffset[1:0],2'b0};
+          memWriteData = block[index][127:0];
+          isLock = 0;
+          #1;
+          isLock = 1;
+        end
+        /* read from main memory */
+        isMemRead = 1;
+        memAddress = address;
         isLock = 0;
         #1;
         isLock = 1;
+        block[index][155] = 1;
+        block[index][153:128] = tag;
+        block[index][127:0] = memReadData;
+      end
+      case(wordOffset)
+        2'b00: block[index][127:96] = writeData;
+        2'b01: block[index][95:64] = writeData;
+        2'b10: block[index][63:32] = writeData;
+        2'b11: block[index][31:0] = writeData;
+      endcase
+      block[index][154] = 1; // marked as dirty        
     end
   end
 
