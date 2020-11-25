@@ -1,12 +1,12 @@
-// testbench for simulation of cache 1a (write through + direct mapped)
+// testbench for simulation of cache 1b (write through + 2-way associative)
 
 `timescale 1ns / 1ps
-`include "main_1a.v"
+`include "main_1b.v"
 
 /*
  *
  */
-module testbench_1a;
+module testbench_1b;
 
   reg isRead;
   reg [9:0] address;
@@ -15,8 +15,9 @@ module testbench_1a;
   wire isHit;
 
   integer currTime;
+  // reg clk; // FIXME: I believe that clk is only needed for Write Back (recycle dirty)
 
-  main_1a uut(
+  main_1b uut(
     .isRead (isRead),
     .address (address),
     .writeData (writeData),
@@ -37,7 +38,7 @@ module testbench_1a;
     
     /* Time 40: miss, readData=0xccc */
     #10 isRead = 1; address = 10'b1000000000;
-    /* Time 50: miss, readData=0xff [direct-mapped feature] */
+    /* Time 50: hit, readData=0xff [2-way feature] */
     #10 isRead = 1; address = 10'b0000000000; 
     /* Time 60: miss, readData=0xc3 */
     #10 isRead = 1; address = 10'b1100000000;
