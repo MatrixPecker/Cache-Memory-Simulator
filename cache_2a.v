@@ -1,8 +1,8 @@
-// cache 1a (write back + direct mapped)
+// cache 2a (write back + direct mapped)
 
 `timescale 1ns / 1ps
 
-module cache_1a(
+module cache_2a(
   // with cpu
   input isRead,
   input [9:0] address,
@@ -13,10 +13,9 @@ module cache_1a(
   output reg isMemRead,
   output reg [127:0] memWriteData,
   output reg isLock,
-  output reg [31:0] memAddress, // FIXME
-  output reg [3:0] isDirty,
+  output reg [31:0] memAddress, // FIXME, construct this
   input [127:0] memReadData
-);
+); 
 
   reg [155:0] block [3:0];
 
@@ -46,9 +45,10 @@ module cache_1a(
         isHit = 1;
       end else begin // miss
         /* check whether the block is dirty */
-        if (block[index][154]==1) begin
+        if (block[index][154]==1) begin // dirty
           /* write back to main memory */
           isMemRead = 0;
+          memAddress = {block[index][153:128],index[1:0],4'b0}; // FIXME: we set wordOffset to 0 and let isDirty decide it
           // TODO
         end
         /* call main memory */

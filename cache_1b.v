@@ -13,11 +13,10 @@ module cache_1b(
   output reg isMemRead,
   output reg [127:0] memWriteData,
   output reg isLock,
-  output reg [3:0] isDirty,  
   input [127:0] memReadData
 );
 
-  reg [156:0] block [3:0]; // FIXME
+  reg [156:0] block [3:0];
 
   integer i;
   initial begin
@@ -29,8 +28,8 @@ module cache_1b(
     isLock = 1;
   end
 
-  reg [26:0] tag; // FIXME
-  reg index; // FIXME
+  reg [26:0] tag;
+  reg index;
   reg realIndex;
   reg [1:0] wordOffset;
   always @(*) begin
@@ -103,13 +102,7 @@ module cache_1b(
       end else begin
         isHit = 0;
       end
-        memWriteData = writeData; // though 128 bits are occupied, only the last 32 bits are effective.
-        case(address[3:2])
-          2'b00: isDirty=4'b0001;
-          2'b01: isDirty=4'b0010;
-          2'b10: isDirty=4'b0100;
-          2'b11: isDirty=4'b1000;
-        endcase
+        memWriteData = block[realIndex][127:0]; // we write back the whole block
         isLock = 0;
         #1;
         isLock = 1;

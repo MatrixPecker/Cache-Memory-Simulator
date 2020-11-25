@@ -17,7 +17,6 @@ module main_2a(
   wire [127:0] memWriteData;
   wire [127:0] memReadData;
   wire [31:0] memAddress;
-  wire [3:0] isDirty;
 
   cache_2a cache(
     .isRead (isRead),
@@ -29,7 +28,6 @@ module main_2a(
     .memWriteData (memWriteData),
     .isLock (isLock),
     .memAddress (memAddress),
-    .isDirty (isDirty),
     .memReadData (memReadData)
   );
 
@@ -38,7 +36,6 @@ module main_2a(
     .isLock (isLock),
     .address (memAddress),
     .writeData (memWriteData),
-    .isDirty (isDirty),
     .readData (memReadData)
   );
 
