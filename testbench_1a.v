@@ -53,6 +53,7 @@ module testbench_1a;
     $display("--------------------------- Time: %d ---------------------------",currTime);
     $display("isRead: %d, address: 0x%H, isHit: %d",isRead, address, isHit);
     $display("writeData: 0x%H, readData: 0x%H",writeData, readData);
+    $display("mem[0]: 0x%H, mem[0x200]: 0x%H, mem[0x300]: 0x%H",uut.mem.mem[0],uut.mem.mem[128],uut.mem.mem[192]);
     currTime = currTime + 10;
   end
 
