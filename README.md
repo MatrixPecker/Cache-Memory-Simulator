@@ -4,25 +4,23 @@
 *A Cache Memory Simulator that supports write through / write back and Direct mapped / 2-way associative. Several cache replacement algorithms are also implemented in C.*
 
 ## Overview
-
 This project uses `verilog` to simulate the datapath between CPU, Cache and Main Memory. It uses `c` to simulate a set of cache-replacement algorithms.
 
-<div style="text-align:center"><img src="asset/cache_overview.png" style="zoom:80%;" />Fig 1. Overview of Cache memory datapath [1]</div>
+<div style="text-align:center"><img src="asset/cache_overview.png" style="zoom:80%;" /><br>Fig 1. Overview of Cache memory datapath [1]<br></div>
 
 
 ## Encoding and Standard
-
 ### Address Encoding
 
-<div style="text-align:center"><img src="asset/direct_addr.png" style="width:70%;" />Fig 2. Address Encoding for direct-mapped cache</div>
+<div style="text-align:center"><img src="asset/direct_addr.png" style="width:70%;" /><br>Fig 2. Address Encoding for direct-mapped cache<br></div>
 
-<div style="text-align:center"><img src="asset/2way_addr.png" style="width:70%;" />Fig 3. Address Encoding for 2-way associative cache</div>
+<div style="text-align:center"><img src="asset/2way_addr.png" style="width:70%;" /><br>Fig 3. Address Encoding for 2-way associative cache<br></div>
 
 ### Block Encoding
 
-<div style="text-align:center"><img src="asset/direct_block.png" style="width:70%;" />Fig 4. Block Encoding for direct-mapped cache</div>
+<div style="text-align:center"><img src="asset/direct_block.png" style="width:70%;" /><br>Fig 4. Block Encoding for direct-mapped cache<br></div>
 
-<div style="text-align:center"><img src="asset/2way_block.png" style="width:70%;" />Fig 5. Block Encoding for 2-way associative cache</div>
+<div style="text-align:center"><img src="asset/2way_block.png" style="width:70%;" /><br>Fig 5. Block Encoding for 2-way associative cache<br></div>
 
 ### Simulation Standard
 The verilog program is simulated with `xvlog`. The board id is `XC7A35TCPG236-1`.
