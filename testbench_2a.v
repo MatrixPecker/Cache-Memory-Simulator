@@ -3,11 +3,13 @@
 `timescale 1ns / 1ps
 `include "main_2a.v"
 
-/*
- *
- */
 module testbench_2a;
 
+  /**
+   *@param isRead: cache reads data from main memory if asserted, writes otherwise
+   *@param isHit: the cache hits is asserted, miss otherwise
+   *@param address: address of required data, can be extended to 32 bits
+   */
   reg isRead;
   reg [9:0] address;
   reg [31:0] writeData;

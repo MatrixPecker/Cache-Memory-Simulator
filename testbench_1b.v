@@ -3,11 +3,13 @@
 `timescale 1ns / 1ps
 `include "main_1b.v"
 
-/*
- *
- */
 module testbench_1b;
 
+  /**
+   *@param isRead: cache reads data from main memory if asserted, writes otherwise
+   *@param isHit: the cache hits is asserted, miss otherwise
+   *@param address: address of required data, can be extended to 32 bits
+   */
   reg isRead;
   reg [9:0] address;
   reg [31:0] writeData;
@@ -15,7 +17,6 @@ module testbench_1b;
   wire isHit;
 
   integer currTime;
-  // reg clk; // FIXME: I believe that clk is only needed for Write Back (recycle dirty)
 
   main_1b uut(
     .isRead (isRead),
